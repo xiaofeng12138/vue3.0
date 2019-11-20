@@ -48,21 +48,21 @@ module.exports = {
   // webpack-dev-server 相关配置
   devServer: {
     open: false, // 编译完成是否打开网页
-    host: '0.0.0.0', // 指定使用地址，默认localhost,0.0.0.0代表可以被外界访问
+    host: '127.0.0.1', // 指定使用地址，默认localhost,0.0.0.0代表可以被外界访问
     port: 8080, // 访问端口
     https: false, // 编译失败时刷新页面
     hot: true, // 开启热加载
     hotOnly: false,
-    proxy: null, // 设置代理
-    // proxy: {
-    //   '/devApi': {
-    //       target: "http://www.web-jshtml.cn/productapi", //API服务器的地址  http://www.web-jshtml.cn/api
-    //       changeOrigin: true,
-    //       pathRewrite: {
-    //           '^/devApi': ''
-    //       }
-    //   }
-    // },
+    // proxy: null, 
+    proxy: {     // 设置代理
+      '/devApi': {
+          target: "http://www.web-jshtml.cn/productapi", //API服务器的地址  http://www.web-jshtml.cn/api
+          changeOrigin: true,
+          pathRewrite: {
+              '^/devApi': ''    //其实这是一个正则表达式  已devApi 开头的
+          }
+      }
+    },
     overlay: { // 全屏模式下是否显示脚本错误
       warnings: true,
       errors: true
