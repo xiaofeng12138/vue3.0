@@ -44,7 +44,7 @@
 
 <script>
 import service from '@/utils/request'
-import { GetSms,SignIn } from '@/api/login'
+import { GetSms,SignIn,Login} from '@/api/login'
 import {reactive,ref,onMounted} from '@vue/composition-api'
 import { stripscript , checkRegEmial ,checkRegPass,checkRegRepass} from '@/utils/reg'
 export default {
@@ -78,7 +78,7 @@ export default {
         if (value === '') {
           callback(new Error('请输入密码'));
         } else if(checkRegPass(value)){
-              return callback(new Error('请输入合法的密码'));
+              return callback(new Error('密码为6-20位数字加字母组合'));
         }else{
             callback()
         }
@@ -165,8 +165,10 @@ export default {
             refs.formName.resetFields(); //清除表单数据
             clearInterval(timer.value);
             BtnStatus.value = true
-            codeBtnStatus.status = false;
-            codeBtnStatus.text = '获取验证码';
+            updateBtnStatus({
+                  status:false,
+                  text:'获取验证码'
+                })
 
     })
 
@@ -186,8 +188,10 @@ export default {
                 username:ruleForm.email,
                 module:modal.value
               }
-              codeBtnStatus.status = true;
-              codeBtnStatus.text = '发送中...';
+               updateBtnStatus({
+                  status:true,
+                  text:'发送中...'
+                })
 
                 GetSms(data).then((response)=>{
                      // console.log(response)
@@ -203,20 +207,10 @@ export default {
 
         //表单提交函数
         const submitForm = ((formName)=>{
-          //console.log(service)
+          //console.log(modal.value)
         refs[formName].validate((valid) => {
               if (valid) {
-                let data = {
-                  username:ruleForm.email,
-                  password:ruleForm.password,
-                  code:ruleForm.repass,
-                  module:"register"
-                }
-                 SignIn(data).then((res)=>{
-                    root.$message.success(res.data.message)
-                 }).catch((error)=>{
-                    console.log(error)
-                 })
+                modal.value == 'login' ? login() : register()
               } else {
                 console.log('error submit!!');
                 return false;
@@ -227,19 +221,60 @@ export default {
 
         //定义倒计时函数
         const  countDown = (number)=>{
+          if(timer.value ){clearInterval(timer.value)}
           let time = number
           timer.value = setInterval(()=>{
             time -- ;
-            console.log(time)
             if(time === 0){
                 clearInterval(timer.value)
-                codeBtnStatus.status = false;
-                codeBtnStatus.text = '重新获取';
+                updateBtnStatus({
+                  status:false,
+                  text:'重新获取'
+                })
             }else{
               codeBtnStatus.text = `倒计时${time}秒`
             }
           },1000)
         }
+
+        //登录函数
+        const login = (()=>{
+            let data = {
+                  username:ruleForm.email,
+                  password:ruleForm.password,
+                  code:ruleForm.repass,
+                }
+                 Login(data).then((res)=>{
+                    root.$message.success(res.data.message)
+                    console.log('登录成功')
+                    root.$router.push('/console')
+                 }).catch((error)=>{
+                    console.log(error)
+                 })
+        })
+
+         //注册函数
+        const register = (()=>{
+          let data = {
+                  username:ruleForm.email,
+                  password:ruleForm.password,
+                  code:ruleForm.repass,
+                  module:"register"
+                }
+                 SignIn(data).then((res)=>{
+                    root.$message.success(res.data.message)
+                    toggleMenu(menuTab[0])
+                 }).catch((error)=>{
+                    console.log(error)
+                 })
+        })
+
+        //更改按钮状态函数
+        const updateBtnStatus = ((params)=>{
+           codeBtnStatus.status = params.status;
+           codeBtnStatus.text = params.text;
+        })
+
 
       onMounted(()=>{
         console.log(1)

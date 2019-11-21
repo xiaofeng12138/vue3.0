@@ -14,6 +14,11 @@ const service = axios.create({
 
 console.log(process.env.NODE_ENV)
 
+
+
+/*
+ 请求接口前 做一些处理  （请求拦截器）
+*/
 service.interceptors.request.use(function (config) {
 
     return config
@@ -23,7 +28,10 @@ service.interceptors.request.use(function (config) {
   });
 
 
-//添加响应拦截器
+//添加响应拦截器 
+/*
+  请求接口后，返回数据进行拦截
+*/
 service.interceptors.response.use(function (response) {
 
   let data = response.data;
