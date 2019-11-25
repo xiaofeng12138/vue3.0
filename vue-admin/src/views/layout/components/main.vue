@@ -23,8 +23,19 @@ export default {
     border: 30px solid #f7f7f7;
     border-bottom: none;
     box-sizing: border;
+    @include webkit(transition, all .3s ease 0s); //scss自定义样式函数
     .wrap{
         padding: 30px;
+    }
+}
+.open{
+    .layout{
+         left:$menuWidth;
+    }
+}
+.close{
+    .layout{
+         left:$menuMinWidth;
     }
 }
 </style>

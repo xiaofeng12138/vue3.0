@@ -47,6 +47,8 @@ import service from '@/utils/request'
 import { GetSms,SignIn,Login} from '@/api/login'
 import {reactive,ref,onMounted} from '@vue/composition-api'
 import { stripscript , checkRegEmial ,checkRegPass,checkRegRepass} from '@/utils/reg'
+import { setCookie , setUsername } from '@/utils/cookie.js'
+
 export default {
   setup(props,{root,refs}){
     //console.log(context)
@@ -197,7 +199,7 @@ export default {
                      // console.log(response)
                      root.$message.success(response.data.message)
                      BtnStatus.value  = false  //修改按钮状态是否可用
-                     countDown(30)
+                     countDown(60)
                    }).catch((error)=>{
                     console.log(error)
                  })
@@ -245,8 +247,14 @@ export default {
                   code:ruleForm.repass,
                 }
                  Login(data).then((res)=>{
+                    console.log(res)
+                    let userInfo = res.data.data
+                    
+                    root.$store.commit('app/SET_TOKEN',userInfo.token)  //存储用户token
+                    root.$store.commit('app/SET_USERNAME',userInfo.username)  //存储用户名
+                    setCookie(userInfo.token)
+                    setUsername(userInfo.username)
                     root.$message.success(res.data.message)
-                    console.log('登录成功')
                     root.$router.push('/console')
                  }).catch((error)=>{
                     console.log(error)

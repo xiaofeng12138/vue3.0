@@ -1,11 +1,13 @@
 <template>
     <div class="nav">
+        <div class="img">
+            <img src="./img/logo.png" alt="">
+        </div>
          <el-menu
           class="el-menu-vertical-demo" 
-          @open="handleOpen" 
-          @close="handleClose" 
           background-color ='transparent'
           text-color='#fff'
+          :collapse="isCollapse"
           active-text-color	="#639FB5"
           router
            >
@@ -16,12 +18,13 @@
                     <i :class="item.meta.icon" style="color:#fff"></i>
                     <!-- <svg-icon :iconClass="item.meta.icon" :className="item.meta.icon" /> -->
                         <!-- <svg-icon :iconClass="item.meta.icon" :className="item.meta.icon" /> -->
-                        {{item.meta.name}}
+                          <span slot="title">{{item.meta.name}}</span>
                     </template>
 
                     <!-- 子菜单 -->
-                    <el-menu-item  v-for="(subItem,index) in item.children" :key="index" :index="subItem.path">{{subItem.meta.name}}</el-menu-item>
-               
+                    <el-menu-item-group>
+                       <el-menu-item  v-for="(subItem,index) in item.children" :key="index" :index="subItem.path">{{subItem.meta.name}}</el-menu-item>
+                    </el-menu-item-group>
                 </el-submenu>
             </template>
         </el-menu>
@@ -30,28 +33,22 @@
 </template>
 
 <script>
-import {reactive,ref,onMounted} from '@vue/composition-api'
+import {reactive,ref,onMounted,computed} from '@vue/composition-api'
 
 export default {
 
     setup(props,{root}){
 
+    //    const isCollapse = ref(false);
+       const router = reactive(root.$router.options.routes);
 
-       const router = reactive(root.$router.options.routes)
-       const handleOpen = (key, keyPath) => {
-        //console.log(key, keyPath);
-      }
-
-      const handleClose = (key, keyPath)=>{
-        //console.log(key, keyPath);
-      }
-
+       const isCollapse = computed(()=>{
+         return root.$store.state.app.isCollapse
+       });
 
       return {
+          isCollapse,
           router,
-          handleOpen,
-          handleClose,
-
       }
     }
     
@@ -67,11 +64,54 @@ export default {
      height: 100vh;
      width:$menuWidth;
      background-color: #3D6B8C;
+     .img{
+         width:$menuWidth; 
+         height: 150px;
+         img{
+             margin: auto;
+             display: block;
+             width: 150px;
+             height: 150px;
+         }
+     }
       svg {
             font-size: 20px;
             margin-right: 10px;
         }
-     
+ }
+ .open{
+     .nav{ 
+         width:$menuWidth; 
+         @include webkit(transition, all .3s ease 0s); //scss自定义样式函数
+         .img{
+         width:$menuWidth; 
+         height: 150px;
+          @include webkit(transition, all .4s ease 0s); //scss自定义样式函数
+         img{
+             margin: auto;
+             display: block;
+             width: 150px;
+             height: 150px;
+         }
+       }
+     }
+ }
+ .close{
+     .nav{
+          width:$menuMinWidth;
+           @include webkit(transition, all .4s ease 0s); //scss自定义样式函数
+          .img{
+            width:$menuMinWidth; 
+            height: $menuMinWidth;
+             @include webkit(transition, all .4s ease 0s); //scss自定义样式函数
+            img{
+                margin: auto;
+                display: block;
+                width: $menuMinWidth;
+                height: $menuMinWidth;
+            }
+        } 
+     }
  }
 </style>
 

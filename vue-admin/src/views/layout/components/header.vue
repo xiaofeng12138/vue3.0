@@ -1,23 +1,51 @@
 <template>
     <div class="header">
         <div class=" pull-left meun">
-            <img src="./menu .png" alt="" >
+            <img src="./img/menu .png" alt="" @click="changeStatus">
         </div>
       
          <div class="right">
             <div class="user-info">
-                <img src="./avater.jpg" alt="">
+                <img src="./img/avater.jpg" alt="">
             </div>
-            <p>管理员</p>
+            <p>{{userName}}</p>
             <div class="logout">
-               <img src="./logout.png" alt="">
+               <img src="./img/logout.png" alt="" @click='logout'>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import {  getCookie,removeCookie,removeUsername  } from '@/utils/cookie'
+import store from '@/store/index'
+import {reactive,ref,onMounted,computed} from '@vue/composition-api'
 export default {
+    setup(props,{root}){
+        const changeStatus = ()=>{
+           root.$store.commit('app/SET_COLLAPSE')
+        };
+        const userName  = computed(()=>root.$store.state.app.user_Name )
+       // const userName = ref(root.$store.state.app.user_Name)
+
+       const logout = ()=>{
+          removeCookie()  //清除token
+          removeUsername()  //清除用户名
+          store.commit('app/SET_TOKEN','')  //清除store 里面的token
+          store.commit('app/SET_USERNAME','')  //清除store 里面的username
+          
+          root.$message.success('退出成功')
+          root.$router.push('/login')
+       }
+
+
+        return{
+            userName,
+            changeStatus,
+            logout
+        }
+
+    }
     
 }
 </script>
@@ -29,6 +57,8 @@ export default {
     top: 0;
     left:$menuWidth;
     height: 75px;
+     @include webkit(box-shadow, 0 3px 16px 0 rgba(0, 0, 0, .1));
+     @include webkit(transition, all .3s ease 0s); //scss自定义样式函数
     .meun{
         height: 75px;
         img{
@@ -67,14 +97,24 @@ export default {
     .logout{
         img{
                display: block;
-                margin:20px;
-                width: 35px;
-                height: 35px;
+                margin:22px;
+                width: 30px;
+                height: 30px;
                 margin-right: 70px;
                 cursor: pointer;
             }
         }
 
+    }
+}
+.open{
+    .header{
+         left:$menuWidth;
+    }
+}
+.close{
+    .header{
+         left:$menuMinWidth;
     }
 }
 </style>
