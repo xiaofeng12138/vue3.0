@@ -55,7 +55,7 @@ const routes = [
             path:"/infoList",
             name:"infoList", 
             meta:{
-              name:'信息管理'
+              name:'信息列表'
             },
             component:() => import ('../views/info/infoList.vue'),
           },
@@ -63,7 +63,7 @@ const routes = [
             path:"/infoCategory",
             name:"infoCategory", 
             meta:{
-              name:'信息管理'
+              name:'信息分类'
             },
             component:() => import ('../views/info/infoCategory.vue'),
           }

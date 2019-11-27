@@ -12,3 +12,17 @@ $menuMinWidth:64px;
     -ms-#{$type}: $value;
     #{$type}: $value;
   }
+
+@mixin labelWarp($align,$width,$Mleft ){
+    label{
+      float:left;
+      width: $width + px;
+      text-align:$align;
+      line-height: 40px;
+      
+     
+  }
+  .wrap-content{
+      margin-left: $Mleft + px;
+  }
+}

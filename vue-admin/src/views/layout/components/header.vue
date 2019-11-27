@@ -28,14 +28,25 @@ export default {
         const userName  = computed(()=>root.$store.state.app.user_Name )
        // const userName = ref(root.$store.state.app.user_Name)
 
+        
+
        const logout = ()=>{
-          removeCookie()  //清除token
-          removeUsername()  //清除用户名
-          store.commit('app/SET_TOKEN','')  //清除store 里面的token
-          store.commit('app/SET_USERNAME','')  //清除store 里面的username
-          
-          root.$message.success('退出成功')
-          root.$router.push('/login')
+
+           root.$confirm('确定要退出吗', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+                  removeCookie()  //清除token
+                removeUsername()  //清除用户名
+                store.commit('app/SET_TOKEN','')  //清除store 里面的token
+                store.commit('app/SET_USERNAME','')  //清除store 里面的username
+                
+                root.$message.success('退出成功')
+                root.$router.push('/login')
+            }).catch(() => {
+            });
+        
        }
 
 
