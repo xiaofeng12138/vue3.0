@@ -5,7 +5,7 @@
                 <div class="label-wrap category">
                     <label for="">类型：</label>
                     <div class="wrap-content">
-                         <el-select v-model="value4" clearable placeholder="请选择" style="width:100%">
+                         <el-select v-model="categoryValue" clearable placeholder="请选择" style="width:100%">
                             <el-option
                                 v-for="item in options"
                                 :key="item.value"
@@ -22,7 +22,7 @@
                     <label for="">时间:&nbsp;&nbsp;</label>
                     <div class="wrap-content">
                        <el-date-picker
-                            v-model="value6"
+                            v-model="dateValue"
                             type="daterange"
                             range-separator="至"
                             start-placeholder="开始日期"
@@ -38,7 +38,7 @@
                 <div class="label-wrap keyWord">
                     <label for="">关键字:&nbsp;&nbsp;</label>
                     <div class="wrap-content">
-                      <el-select v-model="value2"  style="width:100%">
+                      <el-select v-model="keyWord"  style="width:100%">
                             <el-option
                                 v-for="item in options2"
                                 :key="item.value"
@@ -53,7 +53,7 @@
             <el-col :span="3">
                 <div class="label-wrap ">
                     <div class="wrap-content">
-                      <el-input v-model="value2"  style="width:100%">
+                      <el-input v-model="inputValue"  style="width:100%">
                         </el-input>
                     </div>
                 </div> 
@@ -71,7 +71,7 @@
              <el-col :span="3">
                 <div class="label-wrap " style="float:right">
                     <div class="wrap-content">
-                      <el-button type='danger'>新建
+                      <el-button type='danger' @click="diaoValue = true">新建
                         </el-button>
                     </div>
                 </div> 
@@ -116,20 +116,34 @@
                     background
                     layout="total,prev, pager, next"
                     :total="1000">
-                    </el-pagination>
+                </el-pagination>
             </el-col>
 
         </el-row>
         </div>
+
+
+        <!--弹出框部分-->
+        <Dialog :flag = 'diaoValue' @close='fn' />
     </div>
 </template>
 
 <script>
+import Dialog from './dialog/index'
 import {reactive,ref,onMounted,computed} from '@vue/composition-api'
 export default {
-
+     components:{Dialog},
     setup(props,{root}){
-         const options = reactive (
+
+         //ref
+        const  categoryValue = ref('')
+        const  dateValue = ref('')
+        const  keyWord = ref('1')
+        const  inputValue = ref('')
+        const  diaoValue = ref(false)  //控制弹出框是否显示
+
+        //reactive
+        const options = reactive (
                     [{
                         value: '1',
                         label: '国内新闻'
@@ -170,19 +184,22 @@ export default {
                 user:'晓风哥哥'
             }
         ])
-    const  value4 = ref('')
-    const  value6 = ref('')
+
+        //定义函数
+        const fn = ()=>{
+            diaoValue.value = false;
+        }
     
-    const  value2 = ref('1')
 
     return {
-        options,
-        value4,
-        value6,
-        value2,
-        options2,
-        tableData
+        //ref
+        inputValue, categoryValue, dateValue, keyWord,diaoValue,
+        
+        //reactive
+        options, options2, tableData,
 
+        //自定义函数
+        fn,
       }
     }    
     

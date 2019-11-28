@@ -25,3 +25,16 @@ li.el-submenu {
         background-color: $mainCcolor !important;
     }
 }
+
+.el-dialog__body {
+    padding: 30px 47px;
+}
+.el-dialog__footer{
+    text-align: center !important;
+    padding-bottom: 50px;
+    .el-button{
+        width: 150px;
+        margin: 0 11px !important;
+
+    }
+}
