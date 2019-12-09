@@ -1,53 +1,30 @@
 <template>
     <div class='category-warp'>
       
-      <el-button type='danger'>添加一级分类</el-button>
+      <el-button type='danger' @click="addMeuns">添加一级分类</el-button>
       <hr class="hrSTyle" />
 
       <div>
           <el-row :gutter='30'>
               <el-col :span='8'>
                   <div class="category">
-                        <div class="c_item">
+                        <div class="c_item" v-for="(item,index) in category.item" :key="index">
                             <img src="./minus.png" alt="">
-                            <h4>新闻
+                            <h4>{{item.category_name}}
                                 <div class="category_btn">
                                      <el-button size="mini" type='danger' round>编辑</el-button>
                                         <el-button size="mini" type='success' round>添加子集</el-button>
                                         <el-button size="mini" round>删除</el-button>
                                 </div>
                             </h4>
-                            <ul>
-                                <li>国内
+                            <ul v-if = "item.children" >
+                                <li  v-for="(item,index) in item.children" :key="index">
+                                    {{item.category_name}}
                                      <div class="category_btn">
                                        <el-button size="mini" type='danger' round>编辑</el-button>
                                         <el-button size="mini" round>删除</el-button>
                                      </div>
                                 </li>
-                                <li>国内
-                                     <div class="category_btn">
-                                       <el-button size="mini" type='danger' round>编辑</el-button>
-                                        <el-button size="mini" round>删除</el-button>
-                                     </div>
-                                </li>
-                                <li>国内
-                                     <div class="category_btn">
-                                       <el-button size="mini" type='danger' round>编辑</el-button>
-                                        <el-button size="mini" round>删除</el-button>
-                                     </div>
-                                </li>
-                                <li>国内</li> 
-
-                            </ul>
-                        </div>
-                        <div class="c_item">
-                             <img src="./minus.png" alt="">
-                            <h4>新闻</h4>
-                            <ul>
-                                <li>国内</li>
-                                <li>国内</li>
-                                <li>国内</li>
-                                <li>国内</li> 
                             </ul>
                         </div>
                   </div>
@@ -55,15 +32,15 @@
                <el-col :span='16'>
                  <div class="meun-title">
                      <h4>一级分类编辑</h4>
-                      <el-form  label-width="140px" class="formStyle">
-                        <el-form-item label="活动区域">
-                            <el-input v-model="formLabelAlign.region" ></el-input>
+                      <el-form  label-width="140px" class="formStyle" >
+                        <el-form-item label="一级分类" v-if="category_first">
+                            <el-input v-model="formData.firstTitle" ></el-input>
                         </el-form-item>
-                        <el-form-item label="活动形式">
-                            <el-input v-model="formLabelAlign.type"></el-input>
+                        <el-form-item label="二级分类" v-if="ccategory_sec">
+                            <el-input v-model="formData.secondTitle"></el-input>
                         </el-form-item>
                          <el-form-item >
-                            <el-button type='danger'>提交</el-button>
+                            <el-button type='danger' @click="submit" :loading='btn_loading'>提交</el-button>
                         </el-form-item>
                     </el-form>
                  </div>
@@ -76,19 +53,87 @@
 </template>
 
 <script>
-import { reactive } from '@vue/composition-api'
+import { reactive,ref,onMounted} from '@vue/composition-api'
+import { addFirstCategory,getCategory } from '@/api/login.js'
 export default {
 
-    setup(props,{root}){
+    setup(props,{root,refs}){
 
-        const  formLabelAlign = reactive ({
-          name: '',
-          region: '',
-          type: ''
-        }) 
+        const  formData = reactive ({
+          firstTitle: '',
+          secondTitle: '',
+        }) ;
+
+        const category_first = ref(true) 
+        const ccategory_sec = ref(true) 
+        const btn_loading = ref(false) 
+
+        const category = reactive({
+            item:[]
+        })
+                    
+
+
+        const submit = ()=>{
+            if(!formData.firstTitle){
+                root.$message.warning('一级菜单不能为空')
+                return false
+            }
+            category_first.value = true  //改变按钮请求状态
+            let data = {
+                categoryName:formData.firstTitle
+            }
+
+           addFirstCategory(data).then((res)=>{
+               if(res.data.resCode ==  0 ){
+                  btn_loading.value = true
+                  root.$message.success(res.data.message)
+                  category.item.push(res.data.data)
+                  formData.firstTitle = '' 
+                  formData.secondTitle = ''
+                  category_first.value = false  //改变按钮请求状态
+               }
+           }).catch((err)=>{
+               console.log(err)
+               formData.firstTitle = '' 
+               formData.secondTitle = ''
+               category_first.value = false  //改变按钮请求状态
+           })
+        };
+
+        //添加一节分类
+        const addMeuns = ()=>{
+            category_first.value = true
+            ccategory_sec.value = false
+        }
+        
+
+        //添加一级分类函数
+        const getCategoryd = ()=>{
+             getCategory({}).then((res)=>{
+             category.item = res.data.data.data
+           }).catch((err)=>{
+               console.log(err)
+           })
+
+        }
+        
+        //生命周期函数
+        onMounted(()=>{
+           getCategoryd()
+        })
+            
 
         return{
-            formLabelAlign
+            //ref
+            category_first, ccategory_sec,btn_loading,
+
+            //relative
+            formData,category,
+
+            //methods
+            
+            submit,addMeuns,getCategoryd
         }
     }
     
@@ -97,6 +142,8 @@ export default {
 
 <style lang="scss" scoped>
 .category-warp{
+    
+        height: 5000px;
     .hrSTyle{
         background-color: #e9e9e9;
         margin-left: -30px;

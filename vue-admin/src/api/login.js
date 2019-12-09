@@ -28,3 +28,24 @@ export function Login(data){
         data
     })
 }
+
+//添加一级菜单
+
+export function addFirstCategory(data){
+    return service.request({
+        method: "post",
+        url: "/news/addFirstCategory/",
+        data
+    })
+}
+
+
+//获取信息分类
+
+export function getCategory(data){
+    return service.request({
+        method: "post",
+        url: "/news/getCategory/",
+        data
+    })
+}
