@@ -98,8 +98,8 @@
                 <el-table-column prop="user" label="管理员"  align="center" width='115'> </el-table-column>
                 <el-table-column  label="操作"  align="center" > 
                     <template slot-scope="scope">
-                        <el-button  type="danger" size="small">删除</el-button>
                         <el-button type="success" size="small">编辑</el-button>
+                        <el-button  type="danger" size="small" @click="delInfoList">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -107,7 +107,7 @@
         <div class="footer">
              <el-row >
             <el-col :span="12">
-                <el-button> 批量删除 </el-button>
+                <el-button @click="delInfoListAll"> 批量删除 </el-button>
             </el-col>
 
             <el-col :span="12">
@@ -130,11 +130,12 @@
 
 <script>
 import Dialog from './dialog/index'
+import { global } from '@/utils/global_3.x.js'
 import {reactive,ref,onMounted,computed} from '@vue/composition-api'
 export default {
      components:{Dialog},
     setup(props,{root}){
-
+        const {confirm,str} = global()   //导出global里面定义的函数
          //ref
         const  categoryValue = ref('')
         const  dateValue = ref('')
@@ -189,6 +190,38 @@ export default {
         const fn = ()=>{
             diaoValue.value = false;
         }
+        //信息删除函数 delInfoListAll
+        const delInfoList = ()=>{
+            // root.confirm({
+            //     content:'是否确认删除当前信息！！',
+            //     id:'2222',
+            //      fn:confirmFn,
+            // })
+            confirm({
+                content:'是否确认删除当前信息！！',
+                id:'2222',
+                 fn:confirmFn,
+            })
+        }
+
+        //信息批量删除函数 delInfoListAll
+        const delInfoListAll = ()=>{
+            confirm({
+                content:'是否确认删除当前选中的所有信息！！',
+                fn:confirmFn,
+                id:'1111'
+            })
+        }
+
+        //定义确认删除回调函数
+
+        const confirmFn = (value)=>{
+           console.log(value)
+        }
+
+
+       
+       
     
 
     return {
@@ -199,7 +232,7 @@ export default {
         options, options2, tableData,
 
         //自定义函数
-        fn,
+        fn,delInfoList,delInfoListAll,confirmFn
       }
     }    
     

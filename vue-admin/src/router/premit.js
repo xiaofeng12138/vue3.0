@@ -11,7 +11,7 @@ router.beforeEach((to,form,next)=>{
    
     if(getCookie()){   //如果cookie值存在的话
         //动态路由添加  非配角色 为每个不同的角色分配不同的路由 
-        console.log(to.path)
+        //console.log(to.path)
         if(to.path == '/login'){
           removeCookie()  //清除token
           removeUsername()  //清除用户名

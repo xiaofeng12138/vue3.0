@@ -35,7 +35,7 @@ export default {
            root.$confirm('确定要退出吗', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
-              type: 'warning'
+              center: true
             }).then(() => {
                   removeCookie()  //清除token
                 removeUsername()  //清除用户名

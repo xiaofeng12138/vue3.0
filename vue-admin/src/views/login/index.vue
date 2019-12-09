@@ -270,6 +270,7 @@ export default {
                   module:"register"
                 }
                  SignIn(data).then((res)=>{
+                   console.log(res)
                     root.$message.success(res.data.message)
                     toggleMenu(menuTab[0])
                  }).catch((error)=>{
@@ -284,10 +285,10 @@ export default {
         })
 
 
-      onMounted(()=>{
-        console.log(1)
-        console.log(process.env.VUE_APP_ABC)
-      })
+      // onMounted(()=>{
+      //   console.log(1)
+      //   console.log(process.env.VUE_APP_ABC)
+      // })
 
 
       return {

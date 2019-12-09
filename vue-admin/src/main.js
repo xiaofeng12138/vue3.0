@@ -6,8 +6,15 @@ import VueCompositionApi from "@vue/composition-api";
 import Router from "vue-router"
 import SvgIcon from "./icons/index"
 import ElementUI from "element-ui";
+
 import "element-ui/lib/theme-chalk/index.css";
 import './router/premit'
+
+//注入全局函数
+// import global from '@/utils/global'
+// Vue.use(global)
+
+
 
 Vue.use(ElementUI)
 Vue.use(VueCompositionApi);
