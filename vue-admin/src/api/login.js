@@ -49,3 +49,23 @@ export function getCategory(data){
         data
     })
 }
+
+//删除一级分类  
+
+export function delCategory(data){
+    return service.request({
+        method: "post",
+        url: "/news/deleteCategory/",
+        data
+    })
+}
+
+//修改一级分类  
+
+export function editCategory(data){
+    return service.request({
+        method: "post",
+        url: "/news/editCategory/",
+        data
+    })
+}

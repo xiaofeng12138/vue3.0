@@ -22,9 +22,6 @@ console.log(process.env.NODE_ENV)
  请求接口前 做一些处理  （请求拦截器）
 */
 service.interceptors.request.use(function (config) {
-
-  
-
   config.headers['tokey'] = getCookie()
   config.headers['UserName'] = getUsername()
 

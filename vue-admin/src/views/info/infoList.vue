@@ -200,7 +200,7 @@ export default {
             confirm({
                 content:'是否确认删除当前信息！！',
                 id:'2222',
-                 fn:confirmFn,
+                fn:confirmFn,
             })
         }
 
