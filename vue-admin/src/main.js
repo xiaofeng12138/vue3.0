@@ -8,7 +8,7 @@ import SvgIcon from "./icons/index"
 import ElementUI from "element-ui";
 
 import "element-ui/lib/theme-chalk/index.css";
-import './router/premit'
+import './router/premit'  //引入导航守卫
 
 //注入全局函数
 // import global from '@/utils/global'
