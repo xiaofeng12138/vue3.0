@@ -16,7 +16,7 @@ const service = axios.create({
  * 添加请求拦截器
  */
 
-console.log(process.env.NODE_ENV)
+// console.log(process.env.NODE_ENV)
 
 /*
  请求接口前 做一些处理  （请求拦截器）
