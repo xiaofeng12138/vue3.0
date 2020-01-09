@@ -2,7 +2,7 @@
    自定义一个获取信息分类的函数
 */
 
-import {getCategory} from '@/api/login.js'
+import {getCategory,getCategoryAll} from '@/api/login.js'
 import {reactive} from '@vue/composition-api'
  
 export function common(){
@@ -16,9 +16,18 @@ export function common(){
           console.log(err)
         })
     }
+
+    const getCategoryInfoAll =()=>{
+        getCategoryAll().then((res)=>{
+           categoryItem.item = res.data.data
+        }).catch((err)=>{
+          console.log(err)
+        })
+    }
     return{
         getCategoryInfo,
-        categoryItem
+        categoryItem,
+        getCategoryInfoAll
     }
 }
 

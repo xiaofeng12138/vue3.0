@@ -1,6 +1,7 @@
+
 <template>
   <el-dialog
-    title="新增"
+    title="编辑"
     :visible.sync="dialogTableVisible"
     :modal-append-to-body="false"
     @opened="open"
@@ -8,8 +9,8 @@
     width="580px"
     :close-on-click-modal="false"
   >
-    <el-form :model="form">
-      <el-form-item label="类型：" :label-width="formLabelWidth">
+    <el-form :model="form" ref="infoForm"> 
+      <el-form-item label="类型：" :label-width="formLabelWidth" prop ='type'>
         <el-select v-model="form.type" placeholder="请选择新闻分类">
           <el-option
             v-for="(item,index) in categoryType.item "
@@ -20,10 +21,10 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="标题：" :label-width="formLabelWidth">
+      <el-form-item label="标题：" :label-width="formLabelWidth" prop ='newsTitle'>
         <el-input v-model="form.newsTitle"></el-input>
       </el-form-item>
-      <el-form-item label="内容：" :label-width="formLabelWidth">
+      <el-form-item label="内容：" :label-width="formLabelWidth" prop ='content'>
         <el-input type="textarea" v-model="form.content"></el-input>
       </el-form-item>
     </el-form>
@@ -35,7 +36,7 @@
 </template>
 
 <script>
-import { AddNews } from "@/api/info.js";
+import { AddNews,GetNewsList,EditInfo } from "@/api/info.js";
 import {
   reactive,
   ref,
@@ -52,10 +53,14 @@ export default {
     catagory: {
       type: Array,
       default: () => []
+    },
+    id: {
+      type: String,
+      default:''
     }
   },
 
-  setup(props, { root, emit }) {
+  setup(props, { emit,root,refs}) {
     //ref
     const dialogTableVisible = ref(false);
     const formLabelWidth = ref("70px");
@@ -71,7 +76,22 @@ export default {
 
     const open = () => {
       categoryType.item = props.catagory;
+       getInfo()
     };
+
+    const getInfo = ()=>{
+        let data = {
+             pageNumber: 1,
+             pageSize: 1,
+             id:props.id
+        }
+        GetNewsList(data).then((res)=>{
+            let requsetInfo = res.data.data.data[0]
+            form.type = requsetInfo.categoryId
+            form.newsTitle = requsetInfo.title
+            form.content = requsetInfo.content
+        })
+    }
 
     //watch
     watch(() => {
@@ -86,21 +106,22 @@ export default {
 
     //重置表单
     const resetFrom = () => {
-      (form.newsTitle = ""), (form.type = ""), (form.content = "");
+         refs.infoForm.resetFields()
     };
 
-    //新闻提交
+    //修改提交
     const submitNews = () => {
       let data = {
-        category: form.type,
+        categoryId: form.type,
         title: form.newsTitle,
-        content: form.content
+        content: form.content,
+        id:props.id,
       };
       if (!form.type || !form.newsTitle || !form.content) {
         root.$message.error("必填项不能为空!!!");
         return false;
       }
-      AddNews(data)
+      EditInfo(data)
         .then(res => {
           if (res.data.resCode === 0) {
             root.$message.success(res.data.message);
@@ -117,16 +138,11 @@ export default {
     };
 
     return {
-      dialogTableVisible,
-      formLabelWidth,
+      dialogTableVisible,formLabelWidth,
 
-      form,
-      categoryType,
+      form,categoryType,
 
-      close,
-      open,
-      submitNews,
-      resetFrom
+      close,open,submitNews,resetFrom,getInfo
     };
   }
 

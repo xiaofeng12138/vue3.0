@@ -5,7 +5,6 @@ import {reactive,ref,onMounted,computed} from '@vue/composition-api'
 
 export  function global(){
     const str = ref('')
-
     const confirm = (params)=>{
         MessageBox.confirm(params.content, '提示', {
             confirmButtonText: '确定',

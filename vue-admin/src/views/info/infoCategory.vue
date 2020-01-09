@@ -18,7 +18,7 @@
                     round
                     @click="edit({id:item.id,category_name:item.category_name,type:'changeFirstType'})"
                   >编辑</el-button>
-                  <el-button size="mini" type="success" round>添加子集</el-button>
+                  <el-button size="mini" type="success" round @click="addChildren({id:item.id,category_name:item.category_name,type:'addChildren'})">添加子集</el-button>
                   <el-button size="mini" round @click="delFirstCategory(item)">删除</el-button>
                 </div>
               </h4>
@@ -26,15 +26,15 @@
                 <li v-for="(item,index) in item.children" :key="index">
                   {{item.category_name}}
                   <div class="category_btn">
-                    <el-button size="mini" type="danger" round>编辑</el-button>
-                    <el-button size="mini" round>删除</el-button>
+                    <el-button size="mini" type="danger" round @click="editChildren({id:item.id,category_name:item.category_name,type:'editChildren'})">编辑</el-button>
+                    <el-button size="mini" round @click="delChildren(item)">删除</el-button>
                   </div>
                 </li>
               </ul>
             </div>
           </div>
         </el-col>
-        <el-col :span="16">
+        <el-col :span="12">
           <div class="meun-title">
             <h4>一级分类编辑</h4>
             <el-form label-width="140px" class="formStyle">
@@ -63,15 +63,10 @@
 <script>
 import { reactive, ref, onMounted, watch } from "@vue/composition-api";
 import { common } from "@/utils/common.js"; //引入获取信息分类全局函数
-import {
-  addFirstCategory,
-  getCategory,
-  delCategory,
-  editCategory
-} from "@/api/login.js";
+import {addFirstCategory,getCategory,delCategory,editCategory,addChildrenType} from "@/api/login.js";
 export default {
   setup(props, { root, refs }) {
-    const { categoryItem, getCategoryInfo } = common();
+    const { categoryItem, getCategoryInfo,getCategoryInfoAll } = common();
     const category_first = ref(true);
     const ccategory_sec = ref(true);
     const btn_loading = ref(false);
@@ -99,11 +94,14 @@ export default {
 
     //提交函数
     const submit = () => {
-      console.log(searchType.type);
       if (searchType.type === "addFirstType") {
         addFirstFn();
-      } else if (searchType.type === "changeFirstType") {
+      }else if (searchType.type === "changeFirstType") {
         changeFirstType(searchType);
+      }else if(searchType.type === "addChildren"){
+        submitAddChildren(searchType)
+      }else if(searchType.type === "editChildren"){
+        editChildrenFn(searchType)
       }
     };
 
@@ -148,7 +146,6 @@ export default {
 
     //删除一级分类
     const delFirstCategory = val => {
-      console.log(val);
       root
         .$confirm(
           `确定要删除当前名称为 ${val.category_name} 的一级分类吗`,
@@ -180,6 +177,38 @@ export default {
         .catch(() => {});
     };
 
+    //删除子集分类  
+    const delChildren = val => {
+      root
+        .$confirm(
+          `确定要删除当前名称为 ${val.category_name} 的子集分类吗`,
+          "提示",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            center: true
+          }
+        )
+        .then(() => {
+          let data = {
+            categoryId: val.id
+          };
+          delCategory(data)
+            .then(res => {
+              if (res.data.resCode === 0) {
+                root.$message.success(res.data.message);
+                getCategoryInfoAll()
+              } else {
+                root.$message.error("删除失败，请重试");
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        })
+        .catch(() => {});
+    };
+
     //编辑一级分类显示
     const edit = val => {
       searchType.type = val.type;
@@ -191,6 +220,42 @@ export default {
       subBtn.value = false;
       formData.firstTitle = val.category_name;
     };
+
+    //编辑子集分类
+    const editChildren = (val)=>{
+      console.log(val)
+      searchType.type = val.type;
+      searchType.id = val.id;
+      searchType.category_name = val.category_name;
+
+      secondTitle_input.value = false;
+      category_first.value = false; //隐藏
+      subBtn.value = false;
+      formData.secondTitle = val.category_name;
+    }
+
+    //编辑子集函数提交函数
+    const editChildrenFn = (val)=>{
+      if (!formData.secondTitle) {
+        root.$message.warning("子级菜单不能为空");
+        return false;
+      }
+      ccategory_sec.value = true; //改变按钮请求状态
+      let data = {
+        id: val.id,
+        categoryName: formData.secondTitle
+      };
+
+      editCategory(data)
+        .then(res => {
+          if (res.data.resCode == 0) {
+            formData.secondTitle = "";
+            ccategory_sec.value = true;
+            root.$message.success(res.data.message);
+             getCategoryInfoAll()
+          }
+        })
+    }
 
     //编辑一级菜单提交
     const changeFirstType = val => {
@@ -204,7 +269,7 @@ export default {
         categoryName: formData.firstTitle
       };
 
-      editCategory(data)
+     editCategory(data)
         .then(res => {
           if (res.data.resCode == 0) {
             //   btn_loading.value = true
@@ -214,7 +279,7 @@ export default {
             root.$message.success(res.data.message);
             let data = category.item.filter(item => item.id == val.id); //数组过滤
             data[0].category_name = res.data.data.data.categoryName;
-            //   searchType = ''
+            // getCategoryInfoAll()
           }
         })
         .catch(err => {
@@ -225,9 +290,34 @@ export default {
         });
     };
 
+    //添加子集分类
+    const addChildren = (val)=>{
+      console.log(val)
+      secondTitle_input.value = false
+      subBtn.value = false
+      formData.firstTitle = val.category_name
+      searchType.id = val.id
+      searchType.type = val.type
+      searchType.category_name = val.category_name
+    }
+
+    const submitAddChildren = (val)=>{
+        console.log(val)
+        let data = {
+        categoryName:formData.secondTitle,
+        parentId:val.id
+      }
+      console.log(data)
+      addChildrenType(data).then(res=>{
+        root.$message.success(res.data.message);
+        getCategoryInfoAll()
+        formData.secondTitle = ''
+      })
+    }
+
     //生命周期函数
     onMounted(() => {
-      getCategoryInfo();
+      getCategoryInfoAll();
     });
 
     watch(
@@ -239,25 +329,13 @@ export default {
 
     return {
       //ref
-      category_first,
-      ccategory_sec,
-      btn_loading,
-      firstTitle_input,
-      secondTitle_input,
-      subBtn,
+      category_first,ccategory_sec,btn_loading,firstTitle_input,secondTitle_input,subBtn,
 
       //relative
-      formData,
-      category,
-      searchType,
+      formData,category,searchType,
 
       //methods
-
-      submit,
-      addMeuns,
-      delFirstCategory,
-      edit,
-      addFirstFn
+      submit,addMeuns,delFirstCategory,edit,addFirstFn,addChildren,editChildren,editChildrenFn,delChildren
     };
   }
 };
@@ -365,5 +443,4 @@ export default {
   }
 }
 </style>
-
 

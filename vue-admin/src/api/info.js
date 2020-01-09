@@ -19,3 +19,21 @@ export function GetNewsList(data){
         data
     })
 }
+
+//新闻删除接口
+export function DelNewsInfo(data){
+    return service.request({
+        method: "post",
+        url: "/news/deleteInfo/",
+        data
+    })
+}
+
+//新闻修改接口
+export function EditInfo(data){
+    return service.request({
+        method: "post",
+        url: "/news/editInfo/",
+        data
+    })
+}
