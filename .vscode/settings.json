@@ -1,0 +1,19 @@
+{
+// "background.enabled": true,
+// "background.useDefault": false,
+// "background.customImages": [
+// "D:/bg.png"
+// ],
+// "background.style": {
+// "content": "''",
+// "pointer-events": "none",
+// "position": "absolute",
+// "z-index": "1",
+// "width": "100%",
+// "height": "100%",
+// "background-position": "center",
+// "background-repeat": "no-repeat",
+// "background-size": "100%,100%",
+// "opacity": 0.2
+// }
+}

@@ -1,0 +1,26 @@
+
+//自定义样式
+//菜单宽度
+$menuWidth:250px;
+$mainCcolor: #f56c6c;
+$menuMinWidth:64px;
+
+@mixin webkit($type, $value){
+    -webkit-#{$type}: $value;
+    -moz-#{$type}: $value;
+    -o-#{$type}: $value;
+    -ms-#{$type}: $value;
+    #{$type}: $value;
+  }
+
+@mixin labelWarp($align,$width,$Mleft ){
+    label{
+      float:left;
+      width: $width + px;
+      text-align:$align;
+      line-height: 40px;
+  }
+  .wrap-content{
+      margin-left: $Mleft + px;
+  }
+}
