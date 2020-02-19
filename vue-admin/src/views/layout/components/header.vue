@@ -31,13 +31,12 @@ export default {
         
 
        const logout = ()=>{
-
            root.$confirm('确定要退出吗', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               center: true
             }).then(() => {
-                  removeCookie()  //清除token
+                removeCookie()  //清除token
                 removeUsername()  //清除用户名
                 store.commit('app/SET_TOKEN','')  //清除store 里面的token
                 store.commit('app/SET_USERNAME','')  //清除store 里面的username

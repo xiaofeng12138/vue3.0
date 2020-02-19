@@ -23,7 +23,7 @@
 
                     <!-- 子菜单 -->
                     <el-menu-item-group>
-                       <el-menu-item  v-for="(subItem,index) in item.children" :key="index" :index="subItem.path">{{subItem.meta.name}}</el-menu-item>
+                       <el-menu-item  v-for="(subItem,index) in item.children" :key="index" v-if ="!subItem.hidden" :index="subItem.path">{{subItem.meta.name}}</el-menu-item>
                     </el-menu-item-group>
                 </el-submenu>
             </template>

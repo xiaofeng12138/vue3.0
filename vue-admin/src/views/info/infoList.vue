@@ -104,9 +104,11 @@
         <el-table-column prop="user" label="管理员" align="center" width="115"></el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-              <el-button type="success" size="small" @click="editInfo(scope.row.id)">编辑详情</el-button>
-            <el-button type="success" size="small" @click="editInfo(scope.row.id)">编辑</el-button>
             <el-button type="danger" size="small" @click="delInfoList(scope.row.id)">删除</el-button>
+            <el-button type="success" size="small" @click="editInfo(scope.row.id)">编辑</el-button>
+            <el-button type="success" size="small"  @click="infoDetailed(scope.row)" style="margin-left:10px" >编辑详情</el-button>
+             
+            
           </template>
         </el-table-column>
       </el-table>
@@ -290,9 +292,25 @@ export default {
 
     //信息编辑函数
     const editInfo = (id)=>{
-      console.log(id)
+      // console.log(id)
       infoId.value = id
       diaoValue_edit.value = true;
+    }
+
+    /*
+     信息分类详情
+    */
+    const infoDetailed =(data)=>{
+      // console.log(data)
+      root.$store.commit('infoDetailed/SET_ID',data.id)
+      root.$store.commit('infoDetailed/SET_TITLE',data.title)
+      root.$router.push({
+         name:'infoDetailed',
+         params:{
+           id:data.id,
+           title:data.title
+         }
+      })
     }
 
 
@@ -328,7 +346,7 @@ export default {
       options,options2,tableData,
 
       //自定义函数
-      fn,delInfoList,delInfoListAll,confirmFn,getNewsList,changePage,restDate,restCategory,SelectMany,search,FormatData,editInfo
+      fn,delInfoList,delInfoListAll,confirmFn,getNewsList,changePage,restDate,restCategory,SelectMany,search,FormatData,editInfo,infoDetailed
     };
   }
 };

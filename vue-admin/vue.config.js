@@ -57,7 +57,8 @@ module.exports = {
     // proxy: null, 
     proxy: {     // 设置代理
       '/devApi': {
-          target: "http://www.web-jshtml.cn/productapi/token", //API服务器的地址  http://www.web-jshtml.cn/api
+          target: "http://www.web-jshtml.cn/dependenciesapi/token", //API服务器的地址  http://www.web-jshtml.cn/api
+          // target: "http://www.web-jshtml.cn/productapi",
           changeOrigin: true,
           pathRewrite: {
               '^/devApi': ''    //其实这是一个正则表达式  已devApi 开头的

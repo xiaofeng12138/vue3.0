@@ -11,6 +11,7 @@ export function common(){
     })
     const getCategoryInfo =()=>{
         getCategory().then((res)=>{
+         
            categoryItem.item = res.data.data.data
         }).catch((err)=>{
           console.log(err)
