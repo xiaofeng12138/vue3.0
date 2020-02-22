@@ -20,7 +20,17 @@
       </el-form-item>
 
       <el-form-item label="缩略图：">
-        <upload :imgSrc.sync="form.imgUrl" />
+        <el-upload
+          class="avatar-uploader"
+          action="http://up.qiniup.com"
+          :data="data.qiNiuToken"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload"
+        >
+          <img v-if="form.imgUrl" :src="form.imgUrl" class="avatar" />
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
       </el-form-item>
 
       <el-form-item label="发布日期：">
@@ -44,10 +54,10 @@ import {
   computed,
   watch
 } from "@vue/composition-api";
-import upload from "@c/upload/upload.vue";
 import { common } from "@/utils/common.js"; //引入获取信息分类全局函数
 import { formatDate } from "@/utils/date.js"; //日期处理函数
 import { AddNews, GetNewsList, EditInfo } from "@/api/info.js";
+import { Qiniu } from "@/api/common.js"; //引入获取七牛云token的函数
 //引用富文本
 import { quillEditor } from "vue-quill-editor";
 import "quill/dist/quill.core.css";
@@ -55,12 +65,16 @@ import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
 
 export default {
-  components: { quillEditor, upload },
+  components: { quillEditor },
   setup(props, { root, refs }) {
     const { categoryItem, getCategoryInfo, getCategoryInfoAll } = common();
     //定义绑定数据
     const data = reactive({
-      category: []
+      category: [],
+      qiNiuToken: {
+        token: "",
+        key: ""
+      }
     });
 
     //定义form表单
@@ -76,7 +90,47 @@ export default {
     //   getCategoryInfoAll()
 
     const getInfoCategory = () => {
-      getCategoryInfo().then(res => {});
+      getCategoryInfo().then(res => {
+        // console.log(res);
+      });
+    };
+
+    //文件上传成功
+    const handleAvatarSuccess = (res, file) => {
+      console.log(res);
+      form.imgUrl = `http://llc.xiaofenggege.com/${res.key}`;
+      // root.imageUrl = URL.createObjectURL(file.raw);
+    };
+
+    //图片上传之前的参数
+    const beforeAvatarUpload = file => {
+      // const isJPG = file.type === "image/jpeg";
+      // const isLt2M = file.size / 1024 / 1024 < 2;
+
+      // if (!isJPG) {
+      //   root.$message.error("上传头像图片只能是 JPG 格式!");
+      // }
+      // if (!isLt2M) {
+      //   root.$message.error("上传头像图片大小不能超过 2MB!");
+      // }
+
+      //文件名转码
+      let tt = file.name;
+      let key = encodeURI(`${tt}`);
+      data.qiNiuToken.key = key;
+      return;
+    };
+
+    const getQiniuToken = () => {
+      let p = {
+        accesskey: "DDinTpKdKIJi9NA0q2nMoJV-296wps2DYD5JUxb8", //密钥AK*
+        secretkey: "POvLMBoC-EnwHWvwaJVkCjzLVvYuGl9TOVnzBpRv", //密钥SK
+        buckety: "xiaofenggeg" //空间名称
+      };
+      Qiniu(p).then(res => {
+        console.log(res);
+        data.qiNiuToken.token = res.data.data.token;
+      });
     };
 
     //获取新闻详情的函数
@@ -125,6 +179,7 @@ export default {
     onMounted(() => {
       getCategoryInfo();
       getNewsInfo();
+      getQiniuToken();
       root.$store
         .dispatch("common/getInfoCategory")
         .then(res => {
@@ -141,7 +196,10 @@ export default {
       form,
       getInfoCategory,
       getNewsInfo,
-      submit
+      submit,
+      handleAvatarSuccess,
+      beforeAvatarUpload,
+      getQiniuToken
     };
   }
 };
