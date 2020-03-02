@@ -8,3 +8,14 @@ export function Qiniu(data){
         data
     })
 }
+
+
+
+//表格请求数据的函数
+export function LoadTableData(params){
+    return service.request({
+        method: params.method || "post",
+        url:params.url,
+        data:params.data || ''
+    })
+}

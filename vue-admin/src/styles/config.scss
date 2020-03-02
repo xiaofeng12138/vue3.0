@@ -19,6 +19,7 @@ $menuMinWidth:64px;
       width: $width + px;
       text-align:$align;
       line-height: 40px;
+      display: inline-block;
   }
   .wrap-content{
       margin-left: $Mleft + px;

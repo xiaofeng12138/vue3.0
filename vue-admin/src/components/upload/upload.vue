@@ -43,7 +43,6 @@ export default {
 
     //文件上传成功
     const handleAvatarSuccess = (res, file) => {
-      console.log(res);
       let src = `http://llc.xiaofenggege.com/${res.key}`;
       data.image = src;
       emit("update:imgSrc", src); //将数据方向返回给父组件
@@ -66,7 +65,6 @@ export default {
         buckety: "xiaofenggeg" //空间名称
       };
       Qiniu(p).then(res => {
-        console.log(res);
         data.qiNiuToken.token = res.data.data.token;
       });
     };
