@@ -136,7 +136,12 @@
     </div>
 
     <!--弹出框部分-->
-    <Dialog :flag="diaoValue" @close="fn" :catagory="options.item" @gitInfoEmit="getNewsList(1)" />
+    <Dialog
+      :flag.sync="diaoValue"
+      @close="fn"
+      :catagory="options.item"
+      @gitInfoEmit="getNewsList(1)"
+    />
     <EditDialog
       :flag="diaoValue_edit"
       @close="diaoValue_edit = false"

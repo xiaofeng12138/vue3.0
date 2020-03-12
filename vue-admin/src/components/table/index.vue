@@ -51,9 +51,7 @@ export default {
   props: {
     config: {
       type: Object,
-      default: () => {
-        
-      }
+      default: () => {}
     }
   },
   setup(props, { root }) {

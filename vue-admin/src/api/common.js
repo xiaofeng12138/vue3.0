@@ -19,3 +19,13 @@ export function LoadTableData(params){
         data:params.data || ''
     })
 }
+
+
+//获取省市区函数
+export function getCityPicker(data){
+    return service.request({
+        method: "post",
+        url: "/cityPicker/",
+        data
+    })
+}

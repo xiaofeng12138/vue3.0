@@ -28,7 +28,7 @@
         </div>
       </el-col>
       <el-col :span="4">
-        <el-button type="danger" class="pull-right">添加用户</el-button>
+        <el-button type="danger" class="pull-right" @click="diaoValue = true">添加用户</el-button>
       </el-col>
     </el-row>
     <div style="margin-top:30px">
@@ -42,6 +42,7 @@
         </template>
       </tableVue>
     </div>
+    <addUser :flag="diaoValue" @close="fn" />
   </div>
 </template>
 
@@ -55,9 +56,11 @@ import {
 } from "@vue/composition-api";
 import tableVue from "@c/table/index.vue";
 import selectVue from "@c/select/index.vue";
+import addUser from "./dialog/add";
 export default {
-  components: { selectVue, tableVue },
+  components: { selectVue, tableVue, addUser },
   setup(props, { root }) {
+    const diaoValue = ref(false); //控制弹出框是否显示
     const data = reactive({
       selectConfig: {
         //下拉框组件传参的内容
@@ -113,9 +116,14 @@ export default {
     const del = params => {
       console.log(params);
     };
+    const fn = () => {
+      diaoValue.value = false;
+    };
     return {
       data,
-      del
+      del,
+      diaoValue,
+      fn
     };
   }
 };

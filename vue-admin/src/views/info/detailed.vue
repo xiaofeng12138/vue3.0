@@ -102,7 +102,7 @@ export default {
       let data = {
         categoryId: form.categoryId,
         title: form.title,
-        content: form.title,
+        content: form.content,
         id: form.id,
         imgUrl: form.imgUrl
       };

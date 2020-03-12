@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xiao Feng</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0
+        }
+
+        li {
+            list-style: none
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+
+<body>
+    <button id="btn">点我</button>
+    <script>
+        let tt = [
+            {
+                a: '1',
+                b: '2',
+                count: 3,
+                price: '4'
+            },
+            // {
+            //     a: '1',
+            //     b: '2',
+            //     count: 6,
+            //     price: '5'
+            // },
+        ]
+        let fn = function (tt) {
+            let data = JSON.parse(JSON.stringify(tt));
+            data.forEach((ele) => {
+                ele.count--;
+                console.log(ele.count)
+            });
+            tt = data
+        }
+
+        fn(tt)
+        let btn = document.getElementById('btn')
+        btn.onclick = () => {
+            fn(tt)
+        }
+
+    </script>
+</body>
+
+</html>
