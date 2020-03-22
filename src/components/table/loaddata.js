@@ -17,7 +17,7 @@ export function loadDataFn() {
             data: params.data
         };
         LoadTableData(requestData).then(res => {
-             console.log(res)
+            //  console.log(res)
             let resTableData = res.data.data.data;
             tableData.item = resTableData;
             tableData.total = resTableData.length == 0 ? 0:res.data.data.total;

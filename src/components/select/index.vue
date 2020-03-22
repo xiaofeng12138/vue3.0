@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-select v-model="data.selectValue">
+    <el-select v-model="data.selectValue" @change="changeStatus">
       <el-option
         v-for="(item,index) in data.initOptionS"
         :key="index"
@@ -23,14 +23,18 @@ export default {
     config: {
       type: Object,
       default: () => {}
+    },
+    selectData: {
+      type: Object,
+      default: () => {}
     }
   },
-  setup(props, { root }) {
+  setup(props, { root, emit }) {
     const data = reactive({
       selectValue: "",
       initOptionS: [],
       option: [
-        { value: "name", label: "姓名" },
+        { value: "username", label: "姓名" },
         { value: "phone", label: "手机号" },
         { value: "email", label: "邮箱" },
         { value: "id", label: "ID" },
@@ -49,7 +53,11 @@ export default {
         optionArr.push(arr);
       });
       data.initOptionS = optionArr;
-      data.selectValue = optionArr[0].value;
+      // data.selectValue = optionArr[0].value;
+    };
+    const changeStatus = val => {
+      let filterData = data.option.filter(item => item.value == val)[0];
+      emit("update:selectData", filterData);
     };
 
     onMounted(() => {
@@ -57,7 +65,8 @@ export default {
     });
     return {
       data,
-      initOption
+      initOption,
+      changeStatus
     };
   }
 };

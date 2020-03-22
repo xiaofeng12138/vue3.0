@@ -27,3 +27,32 @@ export function delUser(data){
         data
     })
 }
+
+
+//用户是否启用
+export function userActive(data){
+    return service.request({
+        method: "post",
+        url: "/user/actives/",
+        data
+    })
+}
+
+//用户编辑/user/getList/
+export function userEdit(data){
+    return service.request({
+        method: "post",
+        url: "/user/edit/",
+        data
+    })
+}
+
+//用户编辑
+export function searchList(data){
+    return service.request({
+        method: "post",
+        url: "/user/getList/",
+        data
+    })
+}
+

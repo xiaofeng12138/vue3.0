@@ -143,7 +143,16 @@ export default {
 
     const callbackUserTable = () => {
       getTableInfo(data.tableConfig.requestDataList);
-      console.log(3333);
+    };
+
+    //带参数的刷新数据
+    const paramsLoadData = params => {
+      let requsetData = Object.assign({}, params, {
+        pageNumber: 1,
+        pageSize: 10
+      });
+      data.tableConfig.requestDataList.data = requsetData;
+      getTableInfo(data.tableConfig.requestDataList);
     };
 
     return {
@@ -154,7 +163,8 @@ export default {
       handleCurrentChange,
       chageTotal,
       chooseDel,
-      callbackUserTable
+      callbackUserTable,
+      paramsLoadData
     };
   }
 };
