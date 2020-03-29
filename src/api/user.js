@@ -1,10 +1,19 @@
 import service from '@/utils/request'
 
-//获取用户角色的接口
+//获取系统用户角色的接口
 export function GetRole(data={}){
     return service.request({
         method: "post",
         url: "/role/",
+        data
+    })
+}
+
+//获取用户系统列表
+export function GetSystem(data={}){
+    return service.request({
+        method: "post",
+        url: "/system/",
         data
     })
 }
@@ -55,4 +64,16 @@ export function searchList(data){
         data
     })
 }
+
+
+//获取用户按钮接口
+export function getUserBtn(data ={}){
+    return service.request({
+        method: "post",
+        url: "/permButton/",
+        data
+    })
+}
+
+
 

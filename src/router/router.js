@@ -3,11 +3,10 @@ import VueRouter from "vue-router";
 
 Vue.use(VueRouter);
 
-//默认路由
-export const defaultRouters = [
+const routes = [
     {
       path: "/",
-      redirect:"login",
+      redirect:"/login",
       hidden:true,
       meta:{
         name:'首页'
@@ -26,7 +25,7 @@ export const defaultRouters = [
     {
       path:"/console",
       name:"console", 
-      redirect:"index",
+      redirect:"/index",
       meta:{
         name:'控制台',
         icon:'el-icon-printer'
@@ -43,16 +42,10 @@ export const defaultRouters = [
           }
         ]
     },
-]
-
-//动态路由 
-  export  const asyncRouters = [
     {
       path:"/info",
       name:"info", 
       meta:{
-        role:['sale',],
-        system:"infoSystem",
         name:'信息管理',
         icon:'el-icon-rank'
       },
@@ -62,7 +55,6 @@ export const defaultRouters = [
             path:"/infoList",
             name:"infoList", 
             meta:{
-              role:['sale',],
               name:'信息列表'
             },
             component:() => import ('../views/info/infoList.vue'),
@@ -71,7 +63,6 @@ export const defaultRouters = [
             path:"/infoCategory",
             name:"infoCategory", 
             meta:{
-              role:['sale',],
               name:'信息分类'
             },
             component:() => import ('../views/info/infoCategory.vue'),
@@ -81,7 +72,6 @@ export const defaultRouters = [
             name:"infoDetailed", 
             hidden:true,
             meta:{
-              role:['sale'],
               name:'信息详情'
             },
             component:() => import ('../views/info/detailed.vue'),
@@ -92,8 +82,6 @@ export const defaultRouters = [
       path:"/user",
       name:"user", 
       meta:{
-        role:['technician'],
-        system:"userSystem",
         name:'用户管理',
         icon:'el-icon-menu'
       },
@@ -103,17 +91,13 @@ export const defaultRouters = [
             path:"/userList",
             name:"userList", 
             meta:{
-              role:['technician'],
               name:'用户列表'
             },
             component:() => import ('../views/user/index.vue'),
           },
         ]
     }
-]
-
-//系统默认配置系统默认路由
-const routes = defaultRouters
+ ];
 
 const router = new VueRouter({
   mode: "history",

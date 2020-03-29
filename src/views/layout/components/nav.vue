@@ -17,8 +17,6 @@
           <template slot="title">
             <!-- 一级菜单 -->
             <i :class="item.meta.icon" style="color:#fff"></i>
-            <!-- <svg-icon :iconClass="item.meta.icon" :className="item.meta.icon" /> -->
-            <!-- <svg-icon :iconClass="item.meta.icon" :className="item.meta.icon" /> -->
             <span slot="title">{{item.meta.name}}</span>
           </template>
 
@@ -39,16 +37,21 @@
 </template>
 
 <script>
-import { reactive, ref, onMounted, computed } from "@vue/composition-api";
+import { reactive, ref, onMounted, computed,watch } from "@vue/composition-api";
 
 export default {
   setup(props, { root }) {
-    //    const isCollapse = ref(false);
-    const router = reactive(root.$router.options.routes);
+     let router = reactive(root.$router.options.routes);
 
     const isCollapse = computed(() => {
       return root.$store.state.app.isCollapse;
     });
+
+    // watch(()=>router,(newValue,oldvalue)=>{
+    //     console.log(newValue)
+    // })
+
+  
 
     return {
       isCollapse,

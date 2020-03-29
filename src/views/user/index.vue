@@ -21,7 +21,7 @@
                 <el-input v-model="data.inputVlue"></el-input>
               </el-col>
               <el-col :span="16">
-                <el-button type="danger" @click="search">搜索</el-button>
+                <el-button type="danger" @click="search" v-if="showBtn('user:search')">搜索</el-button>
               </el-col>
               <!-- <el-col :span="4">
                 <el-button type="danger" @click="fnn">触发</el-button>
@@ -31,7 +31,12 @@
         </div>
       </el-col>
       <el-col :span="4">
-        <el-button type="danger" class="pull-right" @click="diaoValue = true">添加用户</el-button>
+        <el-button
+          type="danger"
+          class="pull-right"
+          @click="diaoValue = true"
+          v-if="showBtn('user:add')"
+        >添加用户</el-button>
       </el-col>
     </el-row>
     <div style="margin-top:30px">
@@ -47,11 +52,26 @@
           ></el-switch>
         </template>
         <template v-slot:tableFooterLeft>
-          <el-button size="small" type="danger" @click="removeAll">批量删除</el-button>
+          <el-button
+            size="small"
+            type="danger"
+            @click="removeAll"
+            v-if="showBtn('user:batchDel')"
+          >批量删除</el-button>
         </template>
         <template v-slot:operate="slotData">
-          <el-button size="small" type="danger" @click="del(slotData.data)">删除</el-button>
-          <el-button size="small" type="success" @click="handerEdit(slotData.data)">编辑</el-button>
+          <el-button
+            size="small"
+            type="danger"
+            @click="del(slotData.data)"
+            v-if="showBtn('user:del')"
+          >删除</el-button>
+          <el-button
+            size="small"
+            type="success"
+            @click="handerEdit(slotData.data)"
+            v-if="showBtn('user:edit')"
+          >编辑</el-button>
         </template>
       </tableVue>
     </div>

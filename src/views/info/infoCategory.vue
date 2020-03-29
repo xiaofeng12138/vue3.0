@@ -343,7 +343,6 @@ export default {
 
 <style lang="scss" scoped>
 .category-warp {
-  height: 5000px;
   .hrSTyle {
     background-color: #e9e9e9;
     margin-left: -30px;

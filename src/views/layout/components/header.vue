@@ -40,7 +40,7 @@ export default {
           removeUsername(); //清除用户名
           store.commit("app/SET_TOKEN", ""); //清除store 里面的token
           store.commit("app/SET_USERNAME", ""); //清除store 里面的username
-
+          store.commit("promission/SET_ROLES", []); //清除promission 里面的角色
           root.$message.success("退出成功");
           root.$router.push("/login");
         })

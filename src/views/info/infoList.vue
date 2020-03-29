@@ -70,7 +70,7 @@
       <el-col :span="3">
         <div class="label-wrap" style="float:right">
           <div class="wrap-content">
-            <el-button type="danger" @click="diaoValue = true">新增</el-button>
+            <el-button type="danger" @click="diaoValue = true" v-if="showBtn('info:add')">新增</el-button>
           </div>
         </div>
       </el-col>
@@ -105,13 +105,14 @@
         <el-table-column prop="user" label="管理员" align="center" width="115"></el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button type="danger" size="small" @click="delInfoList(scope.row.id)">删除</el-button>
-            <el-button type="success" size="small" @click="editInfo(scope.row.id)">编辑</el-button>
+            <el-button type="danger" size="small" @click="delInfoList(scope.row.id)" v-if="showBtn('info:del')">删除</el-button>
+            <el-button type="success" size="small" @click="editInfo(scope.row.id)" v-if="showBtn('info:edit')">编辑</el-button>
             <el-button
               type="success"
               size="small"
               @click="infoDetailed(scope.row)"
               style="margin-left:10px"
+              v-if="showBtn('info:detailed')"
             >编辑详情</el-button>
           </template>
         </el-table-column>
@@ -120,9 +121,8 @@
     <div class="footer">
       <el-row>
         <el-col :span="12">
-          <el-button @click="delInfoListAll">批量删除</el-button>
+          <el-button @click="delInfoListAll" v-if="showBtn('info:batchDel')">批量删除</el-button>
         </el-col>
-
         <el-col :span="12">
           <el-pagination
             style="float:right"

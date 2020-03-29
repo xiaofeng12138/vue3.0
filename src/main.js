@@ -14,6 +14,10 @@ import './router/premit'  //引入导航守卫
 // import global from '@/utils/global'
 // Vue.use(global)
 
+//注入全局按钮显示函数
+import { showBtn } from '@/utils/showBtn'
+Vue.prototype.showBtn = showBtn
+
 
 
 Vue.use(ElementUI)

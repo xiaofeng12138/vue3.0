@@ -91,3 +91,14 @@ export function editCategory(data){
         data
     })
 }
+
+//获取当前登录用户角色
+
+export function getUserRole(data={}){
+    return service.request({
+        method: "post",
+        url: "/userRole/",
+        data
+    })
+}
+

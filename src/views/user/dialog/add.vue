@@ -26,7 +26,7 @@
           :cityPickerData.sync="data.cityPickerData"
           :cityChoose="['provice','city','area','street']"
         />
-        {{data.cityPickerData}}
+        <!-- {{data.cityPickerData}} -->
       </el-form-item>
       <el-form-item label="是否启用：" :label-width="formLabelWidth" prop="dd">
         <el-radio v-model="data.form.status" label="1" active-value="1">启用</el-radio>
@@ -41,6 +41,23 @@
           >{{ item.name }}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
+
+      <el-form-item label="按钮权限：" :label-width="formLabelWidth" prop="showBtnValue">
+        <template v-if="data.userBtn.length > 0">
+          <div v-for="(item,index) in data.userBtn" :key="index">
+            <h4>{{item.name}}</h4>
+            <template v-if="item.perm && item.perm.length > 0">
+              <el-checkbox-group v-model="data.form.showBtnValue">
+                <el-checkbox
+                  v-for="(btn,index) in item.perm"
+                  :key="index"
+                  :label="btn.value"
+                >{{ btn.name }}</el-checkbox>
+              </el-checkbox-group>
+            </template>
+          </div>
+        </template>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogTableVisible = false">取消</el-button>
@@ -50,7 +67,13 @@
 </template>
 
 <script>
-import { GetRole, addUser, userEdit } from "@/api/user.js";
+import {
+  GetRole,
+  addUser,
+  userEdit,
+  GetSystem,
+  getUserBtn
+} from "@/api/user.js";
 import cityPicker from "@/components/cityPicker/index";
 import { reactive, ref, onMounted, watch } from "@vue/composition-api";
 import EventBus from "@/utils/eventBus"; //引入事件车 中央事件
@@ -76,6 +99,7 @@ export default {
     });
 
     const data = reactive({
+      userBtn: [], //用户按钮显示
       cityPickerData: {}, //城市选择返回的数据
       role: [],
       queryRole: [],
@@ -86,7 +110,8 @@ export default {
         phone: "",
         region: "",
         status: "1",
-        role: []
+        role: [],
+        showBtnValue: []
       }
     });
     //ref
@@ -148,16 +173,22 @@ export default {
       GetRole().then(res => {
         data.queryRole = res.data.data;
       });
+      getUserBtn().then(r => {
+        data.userBtn = r.data.data;
+      });
       let editData = props.editData;
+      console.log(editData);
       if (editData.id) {
-        editData.role = editData.role.split(",");
+        editData.role = editData.role ? editData.role.split(",") : [];
+        editData.showBtnValue = editData.btnPerm
+          ? editData.btnPerm.split(",")
+          : [];
       } else {
         data.form.id && delete data.form.id;
       }
       for (let key in editData) {
         data.form[key] = editData.id ? editData[key] : "";
       }
-      data;
     };
 
     //watch
@@ -184,8 +215,10 @@ export default {
         if (valid) {
           let requsetData = Object.assign({}, data.form);
           requsetData.role = requsetData.role.join(); //数组转字符串
+          requsetData.btnPerm = requsetData.showBtnValue.join(); //用户按钮数组转字符串
           requsetData.region = JSON.stringify(data.cityPickerData);
-          // console.log(requsetData);
+          // console.log(requsetData.btnPerm)
+
           if (requsetData.id) {
             if (requsetData.password) {
               requsetData.password = requsetData.password;
