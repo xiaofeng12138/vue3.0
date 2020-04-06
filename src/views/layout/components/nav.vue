@@ -4,6 +4,7 @@
       <img src="./img/logo.png" alt />
     </div>
     <el-menu
+      :default-active="defaultActive"
       class="el-menu-vertical-demo"
       background-color="transparent"
       text-color="#fff"
@@ -21,13 +22,15 @@
           </template>
 
           <!-- 子菜单 -->
+
           <el-menu-item-group>
-            <el-menu-item
-              v-for="(subItem,index) in item.children"
-              :key="index"
-              v-if="!subItem.hidden"
-              :index="subItem.path"
-            >{{subItem.meta.name}}</el-menu-item>
+            <template v-for="(subItem,index) in item.children">
+              <el-menu-item
+                :key="index"
+                v-if="!subItem.hidden"
+                :index="subItem.path"
+              >{{subItem.meta.name}}</el-menu-item>
+            </template>
           </el-menu-item-group>
         </el-submenu>
       </template>
@@ -37,25 +40,29 @@
 </template>
 
 <script>
-import { reactive, ref, onMounted, computed,watch } from "@vue/composition-api";
+import { reactive, ref,onMounted,computed,watch} from "@vue/composition-api";
 
 export default {
   setup(props, { root }) {
-     let router = reactive(root.$router.options.routes);
+    let router = reactive(root.$router.options.routes);
 
     const isCollapse = computed(() => {
       return root.$store.state.app.isCollapse;
+    });
+
+    const defaultActive = computed(() => {
+      const { path } = root.$route;
+      return path;
     });
 
     // watch(()=>router,(newValue,oldvalue)=>{
     //     console.log(newValue)
     // })
 
-  
-
     return {
       isCollapse,
-      router
+      router,
+      defaultActive
     };
   }
 };

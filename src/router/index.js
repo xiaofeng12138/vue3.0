@@ -43,6 +43,24 @@ export const defaultRouters = [
           }
         ]
     },
+      {
+      path:"/page404",
+      meta:{
+        name:'404',
+        icon:'el-icon-printer'
+      },
+      hidden:true,
+      component:() => import ('../views/layout/index.vue'),
+        children:[
+          {
+            path:"/404",
+            meta:{
+              name:'404'
+            },
+            component:() => import ('../views/404.vue'),
+          }
+        ]
+    },
 ]
 
 //动态路由 
@@ -109,7 +127,8 @@ export const defaultRouters = [
             component:() => import ('../views/user/index.vue'),
           },
         ]
-    }
+    },
+    {path:'*',redirect:'/404',hidden:true}
 ]
 
 //系统默认配置系统默认路由

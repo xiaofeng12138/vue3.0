@@ -5,8 +5,10 @@ import {
   Message
 } from 'element-ui';
 
-const BASEURL = process.env.NODE_ENV === 'production' ? '' : '/devApi'; //判断是dev 还是pro 环境
+//const BASEURL = process.env.NODE_ENV === 'production' ? '' : '/devApi'; //判断是dev 还是pro 环境
+const BASEURL = process.env.NODE_ENV === 'production' ?  process.env.VUE_APP_PRO : process.env.VUE_APP_ABC; //判断是dev 还是pro 环境
 
+console.log(process.env.VUE_APP_ABC)
 const service = axios.create({
   baseURL: BASEURL,
   timeout: 50000,

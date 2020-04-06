@@ -105,8 +105,18 @@
         <el-table-column prop="user" label="管理员" align="center" width="115"></el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button type="danger" size="small" @click="delInfoList(scope.row.id)" v-if="showBtn('info:del')">删除</el-button>
-            <el-button type="success" size="small" @click="editInfo(scope.row.id)" v-if="showBtn('info:edit')">编辑</el-button>
+            <el-button
+              type="danger"
+              size="small"
+              @click="delInfoList(scope.row.id)"
+              v-if="showBtn('info:del')"
+            >删除</el-button>
+            <el-button
+              type="success"
+              size="small"
+              @click="editInfo(scope.row.id)"
+              v-if="showBtn('info:edit')"
+            >编辑</el-button>
             <el-button
               type="success"
               size="small"
@@ -309,9 +319,8 @@ export default {
 
     //重置分类
     const restCategory = row => {
-      let newCategory = options.item.filter(
-        item => item.id == row.categoryId
-      )[0];
+      let newCategory = options.item.filter(item => item.id == row.categoryId )[0];
+      if (!newCategory) {return false; }
       return newCategory.category_name;
     };
 

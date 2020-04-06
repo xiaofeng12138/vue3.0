@@ -115,7 +115,7 @@ export default {
       tableRow: {}, //删除选中的id
       selectConfig: {
         //下拉框组件传参的内容
-        init: ["username", "phone"]
+        init: ["truename", "phone"]
       },
       handerUserSwitch: false,
       tableConfig: {
@@ -238,7 +238,7 @@ export default {
 
     //搜索函数
     const search = () => {
-      // console.log(data.selectData);
+      console.log(data.selectData.value);
       let requestData = {
         [data.selectData.value]: data.inputVlue
       };

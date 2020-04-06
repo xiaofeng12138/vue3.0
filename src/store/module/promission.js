@@ -78,9 +78,7 @@ const actions = { // 可以处理回调事件
                                     return child
                                 }
                             })
-                          
                         }
-
                         return item  //有限返回第一层目录
                     }
 
@@ -88,6 +86,7 @@ const actions = { // 可以处理回调事件
                     // if(data.includes(item.meta.system)){
                     //     return item
                     // }
+                    newRouters.push(asyncRouters[asyncRouters.length - 1])
                 })
             }
             commit('SET_NEWROUTERS',newRouters)
